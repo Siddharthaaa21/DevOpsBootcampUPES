@@ -3,14 +3,23 @@ Local DNS Server IP
 <ip-here>
 
 
-
+    Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+    0.0.0.0         10.0.0.1        0.0.0.0         UG    100    0        0 eth0
+    10.0.0.0        0.0.0.0         255.255.255.0   U     100    0        0 eth0
+    10.0.0.1        0.0.0.0         255.255.255.255 UH    100    0        0 eth0
+    10.0.0.2        0.0.0.0         255.255.255.255 UH    100    0        0 eth0
 Default gateway IP
 -------------------
 <ip-here>
 
-
+    nameserver 127.0.0.53
+    options edns0 trust-ad
+    search ec2.internal
 
 DHCP IP allocation sys-logs
 -------------------
 <logs-here>
+   ip-10-0-0-56 dhclient[346]: DHCPDISCOVER on eth0 to 255.255.255.255  
+   ip-10-0-0-56 dhclient[346]: DHCPOFFER of 10.0.0.56 from 10.0.0.1
+   ip-10-0-0-56 dhclient[346]: DHCPREQUEST for 10.0.0.56 on eth0 to 255.255.255.255 
 
