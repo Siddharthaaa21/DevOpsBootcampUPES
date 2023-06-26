@@ -16,7 +16,7 @@ spec:
       - name: grafana
         image: grafana/grafana
         ports:
-        - containerPort: 3000
+        - containerPort: 80
         env:
           - name: GF_AUTH_BASIC_ENABLED
             value: "true"
@@ -30,6 +30,15 @@ spec:
               secretKeyRef:
                 name: grafana-creds
                 key: password
+        volumeMounts:
+        # name must match the volume name below
+        - name: grafana-datasources-vol
+          mountPath: "/etc/grafana/provisioning/datasources"
+      # The secret data is exposed to Containers in the Pod through a Volume.
+      volumes:
+        - name: grafana-datasources-vol
+          configMap:
+            name: grafana-datasources
 ---
 apiVersion: v1
 kind: Service
@@ -41,3 +50,18 @@ spec:
   ports:
     - port: 3000
       targetPort: 3000
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources
+data:
+  datasources.yaml: |-
+    apiVersion: 1
+    datasources:
+      - name: CloudWatch
+        type: cloudwatch
+        jsonData:
+          authType: default
+          defaultRegion: us-east-2
+
